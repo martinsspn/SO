@@ -1,5 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <pthread.h>
+#include "controller.h"
+
+#define N 7
+sem_t s[N];
+sem_t mutex;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -7,12 +13,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    for(int i=0;i<N;i++){
+        sem_init(&s[i], 0, 1);
+    }
+    sem_init(&mutex, 0, 1);
+
+    controller = new Controller(s, mutex);
     //Cria o trem com seu (ID, posição X, posição Y)
-    trem1 = new Trem(1,60,90);
-    trem2 = new Trem(2,470,30);
-    trem3 = new Trem(3, 870, 90);
-    trem4 = new Trem(4, 600, 270);
-    trem5 = new Trem(5, 320, 270);
+
+    trem1 = new Trem(1, 160, 30, controller);
+    trem2 = new Trem(2, 470, 30, controller);
+    trem3 = new Trem(3, 870, 90, controller);
+    trem4 = new Trem(4, 600, 270, controller);
+    trem5 = new Trem(5, 320, 270, controller);
 
     /*
      * Conecta o sinal UPDATEGUI à função UPDATEINTERFACE.
@@ -27,8 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(trem4,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
     connect(trem5,SIGNAL(updateGUI(int,int,int)),SLOT(updateInterface(int,int,int)));
 
-
-
+    for(int i=0;i<N;i++){
+        sem_destroy(&s[i]);
+    }
+    sem_destroy(&mutex);
 }
 
 //Função que será executada quando o sinal UPDATEGUI for emitido
@@ -82,4 +97,29 @@ void MainWindow::on_pushButton_2_clicked()
     trem4->terminate();
     trem5->terminate();
 
+}
+
+void MainWindow::on_slidert1_valueChanged(int value)
+{
+    trem1->setVelocidade( value);
+}
+
+void MainWindow::on_slidert2_valueChanged(int value)
+{
+    trem2->setVelocidade( value);
+}
+
+void MainWindow::on_slidert3_valueChanged(int value)
+{
+    trem3->setVelocidade( value);
+}
+
+void MainWindow::on_slidert4_valueChanged(int value)
+{
+    trem4->setVelocidade( value);
+}
+
+void MainWindow::on_slidert5_valueChanged(int value)
+{
+    trem5->setVelocidade(value);
 }

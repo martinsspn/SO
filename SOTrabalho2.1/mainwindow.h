@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "trem.h"
+#include "controller.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,9 +26,19 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_slidert1_valueChanged(int value);
+
+    void on_slidert2_valueChanged(int value);
+
+    void on_slidert3_valueChanged(int value);
+
+    void on_slidert4_valueChanged(int value);
+
+    void on_slidert5_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
-
+    Controller *controller;
     //Cria os objetos TREM's
     Trem *trem1;
     Trem *trem2;
