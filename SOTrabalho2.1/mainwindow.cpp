@@ -5,7 +5,7 @@
 
 #define N 7
 sem_t s[N];
-sem_t mutex;
+sem_t mutex[3];
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i=0;i<N;i++){
         sem_init(&s[i], 0, 1);
     }
-    sem_init(&mutex, 0, 1);
+    for(int i=0;i<3;i++){
+        sem_init(&mutex[i], 0, 1);
+    }
 
     controller = new Controller(s, mutex);
     //Cria o trem com seu (ID, posição X, posição Y)
@@ -43,7 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i=0;i<N;i++){
         sem_destroy(&s[i]);
     }
-    sem_destroy(&mutex);
+    for(int i=0;i<3;i++){
+        sem_destroy(&mutex[i]);
+    }
 }
 
 //Função que será executada quando o sinal UPDATEGUI for emitido
@@ -101,22 +105,22 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_slidert1_valueChanged(int value)
 {
-    trem1->setVelocidade( value);
+    trem1->setVelocidade(value);
 }
 
 void MainWindow::on_slidert2_valueChanged(int value)
 {
-    trem2->setVelocidade( value);
+    trem2->setVelocidade(value);
 }
 
 void MainWindow::on_slidert3_valueChanged(int value)
 {
-    trem3->setVelocidade( value);
+    trem3->setVelocidade(value);
 }
 
 void MainWindow::on_slidert4_valueChanged(int value)
 {
-    trem4->setVelocidade( value);
+    trem4->setVelocidade(value);
 }
 
 void MainWindow::on_slidert5_valueChanged(int value)

@@ -8,8 +8,9 @@ class Controller
 {
 public:
     sem_t s[7];
-    sem_t mtx;
-    Controller(sem_t s[7], sem_t mtx);
+    sem_t mtx[3];
+    Controller(sem_t s[7], sem_t mtx[3]);
+    int count[7];
 };
 
 #endif // CONTROLLER_H
