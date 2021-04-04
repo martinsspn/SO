@@ -36,6 +36,8 @@ private slots:
 
     void on_slidert5_valueChanged(int value);
 
+    void on_slidert1_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
     Controller *controller;

@@ -21,7 +21,8 @@ void Trem::run(){
         case 1:     //Trem 1
             if (y == 30 && x <330){
                 if(x==310){
-                    sem_wait(&controller->mtx[1]);
+                    //sem_wait(&controller->mtx[1]);
+                    pthread_mutex_lock(&controller->mtx[1]);
                     sem_wait(&controller->s[0]);
                 }else if(x == 320){
                     
@@ -38,7 +39,8 @@ void Trem::run(){
                     sem_post(&controller->s[2]);
                 else if(x==310){
                     sem_post(&controller->s[0]);
-                    sem_post(&controller->mtx[1]);
+                    //sem_post(&controller->mtx[1]);
+                    pthread_mutex_unlock(&controller->mtx[1]);
                 }
                 x-=10;
             }else
@@ -50,7 +52,8 @@ void Trem::run(){
                 if(x == 350){
                     sem_post(&controller->s[0]);
                 }else if(x==580){
-                    sem_wait(&controller->mtx[2]);
+                    //sem_wait(&controller->mtx[2]);
+                    pthread_mutex_lock(&controller->mtx[2]);
                     sem_wait(&controller->s[1]);
                 }
                 x+=10;
@@ -61,11 +64,12 @@ void Trem::run(){
                 y+=10;
             }else if (x > 330 && y == 150){
                 if(x == 350){
-                    //Região Crítica
                     sem_wait(&controller->s[0]);
                 }else if(x == 580){
                     sem_post(&controller->s[1]);
-                    sem_post(&controller->mtx[2]);
+                    //sem_post(&controller->mtx[2]);
+                    pthread_mutex_unlock(&controller->mtx[2]);
+
                 }else if(x == 470){
 
                 }else if(x == 480){
@@ -100,14 +104,17 @@ void Trem::run(){
                     //Região Crítica
                     sem_wait(&controller->s[1]);
                 }else if(x == 750){
-                    sem_wait(&controller->mtx[2]);
+                    //sem_wait(&controller->mtx[2]);
+                    pthread_mutex_lock(&controller->mtx[2]);
                     sem_wait(&controller->s[5]);
                 }
                 x-=10;
             }else{
                 if(y == 130){
                     sem_post(&controller->s[5]);
-                    sem_post(&controller->mtx[2]);
+                    //sem_post(&controller->mtx[2]);
+                    pthread_mutex_unlock(&controller->mtx[2]);
+
                 }
                 y-=10;
             }
@@ -117,7 +124,9 @@ void Trem::run(){
             if (y == 150 && x <730){
                 if(x == 480){                   
                     sem_post(&controller->s[6]);
-                    sem_post(&controller->mtx[0]);
+                    //sem_post(&controller->mtx[0]);
+                    pthread_mutex_unlock(&controller->mtx[0]);
+
                 }else if(x == 620){
                     sem_post(&controller->s[4]);
                 }else if(x == 580){
@@ -131,7 +140,8 @@ void Trem::run(){
                 y+=10;
             }else if (x > 460 && y == 270){
                 if(x == 480){
-                    sem_wait(&controller->mtx[0]);
+                    //sem_wait(&controller->mtx[0]);
+                    pthread_mutex_lock(&controller->mtx[0]);
                     sem_wait(&controller->s[6]);
                 }
                 x-=10;
@@ -148,18 +158,23 @@ void Trem::run(){
             if (y == 150 && x <460){
                 if(x==350){
                     sem_post(&controller->s[2]);
-                    sem_post(&controller->mtx[1]);
+                    //sem_post(&controller->mtx[1]);
+                    pthread_mutex_unlock(&controller->mtx[1]);
+
                 }else if(x == 440){
                     sem_wait(&controller->s[6]);
                 }else if(x == 310){
-                    sem_wait(&controller->mtx[0]);
+                    //sem_wait(&controller->mtx[0]);
+                    pthread_mutex_lock(&controller->mtx[0]);
                     sem_wait(&controller->s[3]);
                 }
                 x+=10;
             }else if (x == 460 && y < 270){
                 if(y == 170){
                     sem_post(&controller->s[3]);
-                    sem_post(&controller->mtx[0]);
+                    //sem_post(&controller->mtx[0]);
+                    pthread_mutex_unlock(&controller->mtx[0]);
+
                 }
                 y+=10;
             }else if (x > 190 && y == 270){
@@ -169,7 +184,8 @@ void Trem::run(){
                 x-=10;
             }else{
                 if(y==170){
-                    sem_wait(&controller->mtx[1]);
+                    //sem_wait(&controller->mtx[1]);
+                    pthread_mutex_lock(&controller->mtx[1]);
                     sem_wait(&controller->s[2]);
 
                 }else if(y == 160){

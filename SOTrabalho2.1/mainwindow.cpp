@@ -5,7 +5,8 @@
 
 #define N 7
 sem_t s[N];
-sem_t mutex[3];
+//sem_t mutex[3];
+pthread_mutex_t mutex[3];
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
         sem_init(&s[i], 0, 1);
     }
     for(int i=0;i<3;i++){
-        sem_init(&mutex[i], 0, 1);
+        //sem_init(&mutex[i], 0, 1);
+        pthread_mutex_init(&mutex[i], NULL);
     }
 
     controller = new Controller(s, mutex);
@@ -46,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
         sem_destroy(&s[i]);
     }
     for(int i=0;i<3;i++){
-        sem_destroy(&mutex[i]);
+        //sem_destroy(&mutex[i]);
+        pthread_mutex_destroy(&mutex[i]);
     }
 }
 
@@ -127,3 +130,5 @@ void MainWindow::on_slidert5_valueChanged(int value)
 {
     trem5->setVelocidade(value);
 }
+
+
